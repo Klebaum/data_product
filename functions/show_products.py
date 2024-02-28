@@ -17,6 +17,8 @@ def procces_filter(query, filters):
     return concatenated_df
 
 def show_all_products(query, today, daily_credits, monthly_credits, yearly_credits):
+    today = pd.to_datetime(today).strftime('%Y/%m/%d')
+    
     container1 = st.container(border=True)
     col1, col2 = container1.columns([0.8, 1], gap="large")
     
@@ -24,7 +26,7 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
 
     title = query['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
     col1.title(f'{title}: ')
-    col2.title('CRÉDITOS COBRADOS SNOWFLAKE:')
+    col2.subheader('CRÉDITOS COBRADOS SNOWFLAKE:')
 
     with col1:
         col1.write(f'Owner: {query["OWNER"].unique()[0]}')
@@ -221,19 +223,3 @@ def show_data_product_1(query):
     container3.subheader('Grafo de Processos diário:')
     dot = make_graph(df_daily_graph)
     container3.graphviz_chart(dot)
-
-def show_home_content_dp2():
-    st.write("Conteúdo da aba Home")
-
-def show_tables_graphs_content_dp2():
-   st.write("Produto indisponível")
-
-def show_graph_content_dp2():
-    st.write("Produto indisponível")
-    
-def show_data_product_2():
-    sub_tab = st.radio("Selecione uma sub aba:", ("Home", "Tabelas/Gráficos", "Grafo"))
-    if sub_tab == "Home":
-        show_home_content_dp2()
-    elif sub_tab == "Tabelas/Gráficos":
-        show_tables_graphs_content_dp2()

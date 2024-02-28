@@ -4,7 +4,7 @@ import datetime
 from datetime import date
 import plotly.express as px
 # from snowflake.snowpark.context import get_active_session
-from functions.show_products import show_all_products, show_data_product_1, show_data_product_2
+from functions.show_products import show_all_products
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m
 st.set_page_config(layout="wide")
 
