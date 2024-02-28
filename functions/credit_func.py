@@ -38,7 +38,7 @@ def credit_billed_year(df, date, var_to_group='QUERY_TAG'):
 
 
 def credit_billed_month(df, date, var_to_group='QUERY_TAG'):
-    adjust_d = df.pivot_table(index='END_TIME', columns='QUERY_TAG', values='CREDITS_USED_PER_USER_APROX', aggfunc='sum')
+    adjust_d = df.pivot_table(index='END_TIME', columns=var_to_group, values='CREDITS_USED_PER_USER_APROX', aggfunc='sum')
     adjust_d.reset_index(inplace=True)
 
     # Convert 'END_TIME' to date format
@@ -71,7 +71,7 @@ def credit_billed_day(df, date, var_to_group='QUERY_TAG'):
 
 def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
     colors = ['#249edc', '#005b96', '#b3cde0']
-    adjust_d, year, _ = credit_billed_year(df, date)
+    adjust_d, year, _ = credit_billed_year(df, date, var_to_group)
                       
     unique_tags = df[var_to_group].unique()
     num_unique_tags = len(unique_tags)
@@ -98,7 +98,7 @@ def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
 
 def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
     colors = ['#249edc', '#005b96', '#b3cde0']
-    adjust_d, date_to_filter, total_credits = credit_billed_month(df, date)
+    adjust_d, date_to_filter, total_credits = credit_billed_month(df, date, var_to_group)
 
     # Definindo cores automaticamente com base nas tags únicas
     unique_tags = df[var_to_group].unique()
@@ -127,7 +127,7 @@ def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
 
 # Plot dos gráficos usando o st.bar_chart
 def plot_credit_billed_day(df, date, col1, var_to_group='QUERY_TAG'):
-    adjust_d, date_to_filter, total_credits = credit_billed_day(df, date)
+    adjust_d, date_to_filter, total_credits = credit_billed_day(df, date, var_to_group)
 
     fig = px.bar(adjust_d, x=var_to_group, y='CREDITS_USED_PER_USER_APROX'
                  ,color_discrete_sequence=['#249edc'])

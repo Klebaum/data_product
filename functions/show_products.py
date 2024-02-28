@@ -26,7 +26,7 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
 
     title = query['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
     col1.title(f'{title}: ')
-    col2.subheader('CRÉDITOS COBRADOS SNOWFLAKE:')
+    col2.title('CRÉDITOS COBRADOS SNOWFLAKE:')
 
     with col1:
         col1.write(f'Owner: {query["OWNER"].unique()[0]}')
