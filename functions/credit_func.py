@@ -63,7 +63,8 @@ def credit_billed_day(df, date):
 
     adjust_d = df_filtered.pivot_table(index='QUERY_TAG', values='CREDITS_USED_PER_USER_APROX',  aggfunc='sum')
     adjust_d.reset_index(inplace=True)
-
+    if adjust_d.empty:
+        return adjust_d, date_to_filter, 0
     total_credits = adjust_d['CREDITS_USED_PER_USER_APROX'].sum()  
 
     return adjust_d, date_to_filter, round(total_credits,2)
@@ -80,8 +81,8 @@ def plot_credit_billed_year(df, date, container):
 
     fig = px.bar(adjust_d, x='MonthYear', y='CREDITS_USED_PER_USER_APROX', 
                  color='QUERY_TAG', color_discrete_map=color_map,
-                 labels={'MonthYear': 'Mês e Ano', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'},
-                 text_auto=True)
+                 labels={'MonthYear': 'Mês e Ano', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'}
+                )
     fig.update_xaxes(type='category')
 
     fig.add_annotation(x=adjust_d['MonthYear'].iloc[-1], y='CREDITS_USED_PER_USER_APROX',
@@ -108,20 +109,19 @@ def plot_credit_billed_month(df, date, col2):
 
     # Plotting with Plotly
     fig = px.bar(adjust_d, x='END_TIME', y=df['QUERY_TAG'],
-                 title=f'Créditos gastos em {date_to_filter}',
                  color_discrete_map=color_map)
 
     fig.update_xaxes(type='category')
 
     # Add total value annotation
     fig.add_annotation(x=adjust_d['END_TIME'].iloc[-1], y=total_credits,
-                       text=f'Total: {round(total_credits, 2)}',
+                       text='',
                        showarrow=False,
                        font=dict(color='black', size=16),
                        xanchor='center', yanchor='bottom')
 
     col2.subheader(f'Créditos cobrados em {date_to_filter}')
-    fig.update_layout(xaxis_title='DATA', yaxis_title='CRÉDITOS COBRADOS', title_x=0.5)
+    fig.update_layout(xaxis_title='DATA', yaxis_title='CRÉDITOS COBRADOS')
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -148,7 +148,7 @@ def plot_credit_billed_day(df, date, col1):
     fig.add_annotation(
     x=adjust_d['QUERY_TAG'].iloc[-1],
     y=total_credits,
-    text=f'Total: {round(total_credits, 2)}',
+    text='',
     font=dict(color='black', size=16),
     showarrow=False,
     xanchor='right',
