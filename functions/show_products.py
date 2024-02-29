@@ -6,6 +6,9 @@ import pandas as pd
 from functions.credit_func import credit_sum_m, credit_sum_d, plot_credit_billed_day, plot_credit_billed_month, plot_credit_billed_year
 from functions.credit_func import credit_billed_year, credit_billed_month, credit_billed_day
 from functions.graph_func import make_graph
+from streamlit_extras.switch_page_button import switch_page
+from st_pages import Page, show_pages, hide_pages
+
 
 def procces_filter(query, filters, var_to_filter='QUERY_TAG'):
     dfs = [] 
@@ -16,7 +19,7 @@ def procces_filter(query, filters, var_to_filter='QUERY_TAG'):
     concatenated_df = pd.concat(dfs, ignore_index=True) 
     return concatenated_df
 
-def show_all_products(query, today, daily_credits, monthly_credits, yearly_credits):
+def show_all_products(query, today, daily_credits, monthly_credits, yearly_credits, description):
     today = pd.to_datetime(today).strftime('%Y/%m/%d')
     
     container1 = st.container(border=True)
@@ -31,12 +34,19 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
     with col1:
         col1.write(f'Owner: {query["OWNER"].unique()[0]}')
         col1.write(f'Quantidade de objetos: {n_tables}')
+        col1.write(f'Tempo de atualização: {query["REFRESH_VALUE"].unique()[0]}')
         col1.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
-    with container1.expander('Detalhes das informações do produto'):
-            aux = (f'As informações foram retiradas a partir de um trabalho de "Tagging" dos objetos e processos'+
-                   f' realizados no Snowflake para o {title}. Os objetos são atualizados a cada hora.')
-            st.write(aux)
+        
+        st.session_state.key_value += 1
+        if st.button('Análise de créditos cobrados do produto', key=st.session_state.key_value):
+            st.session_state.btn_tag = query['TAG_NAME'].unique()[0]
+            switch_page(' ')
 
+    with container1.expander('Detalhes das informações do produto'):
+        aux = (f'As informações foram retiradas a partir de um trabalho de "Tagging" dos objetos e processos'+
+                f' realizados no Snowflake para o {title}. Os objetos são atualizados a cada hora.')
+        st.write(aux)
+        
     col2.write(f'Créditos cobrados na data atual {today}:')
     with col2:
         st.markdown(
@@ -144,13 +154,13 @@ def show_data_product_1(df2, product):
         with container2:
             plot_credit_billed_year(sum_m, monitoring_date, container2)
     container3 = st.container(border=True)
-    container3.subheader('Grafo de Processos mensal:')
+    container3.subheader('Fluxograma de Processos mensal:')
     dot = make_graph(df2)    
     container3.graphviz_chart(dot)
 
     date_to_filter = pd.to_datetime(monitoring_date).strftime('%Y-%m-%d')
     df_daily_graph = df2[df2['END_TIME'] == date_to_filter]
     # st.write(df2)
-    container3.subheader('Grafo de Processos diário:')
+    container3.subheader('Fluxograma de Processos diário:')
     dot = make_graph(df_daily_graph)
     container3.graphviz_chart(dot)

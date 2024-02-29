@@ -1,15 +1,31 @@
-import streamlit as st
 import pandas as pd
+import streamlit as st
 import datetime
 from datetime import date
-from general_functions.credit_general  import show_data_general
-from general_functions.show_func import score_card_geral, ranking_plot, pie_plot
+import plotly.express as px
+# from snowflake.snowpark.context import get_active_session
+from functions.show_products import show_all_products
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m
-from functions.credit_func import plot_credit_billed_day, plot_credit_billed_month, plot_credit_billed_year
-from functions.show_products import procces_filter
+from st_pages import Page, show_pages, hide_pages
 
+st.set_page_config(layout="wide", )
+
+show_pages([
+    Page("catalogo.py","Catálogo"),
+    Page("visao_geral.py","Visão Geral"),
+    Page("monitoramento_de_creditos.py"," ")
+])
+
+hide_pages([' '])
+
+# key to btn
+st.session_state.key_value = 0 
+
+# query = "select owner, tag_name, obj_name, tag_value, end_time, source, query_tag, refresh_value, credits_used_per_user_aprox from streamlit_hierarchy_viewer.ml_forecasting.FORECAST_PRODUCT_v2 order by query_tag;"
 query = pd.read_csv('Custo detalhado.csv')
+
 df2 = pd.DataFrame(query)
+st.session_state["query"] = query
 
 # Dados sintéticos
 new_entry = {
@@ -85,51 +101,22 @@ new_row_df4 = pd.DataFrame([new_entry4])
 # Concatenando o novo DataFrame com o DataFrame existente
 df2 = pd.concat([df2, new_row_df, new_row_df2, new_row_df3, new_row_df4], ignore_index=True)
 
+
+df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(float)
+# df2 = df2[df2['TAG_NAME'] == 'FORECAST_DATA_PRODUCT']
 today = date.today()
 
-df_aux = df2.copy()
-df_aux['END_TIME'] = pd.to_datetime(df2['END_TIME'])
-container1 = st.container()
-col1, col2 = container1.columns([0.8, 1], gap="large")
+list_products = df2['TAG_NAME'].unique()
+ 
+for product in list_products:
+    df_aux = df2[df2['TAG_NAME'] == product]
 
-title = 'VISÃO GERAL DOS PRODUTOS' 
-col1.title(f'{title}: ')
-col2.title('CRÉDITOS COBRADOS SNOWFLAKE:')
+    sum_d = credit_sum_d(df_aux, today)
+    sum_m = credit_sum_m(df_aux, today)
 
-with col1:
-    col1.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
-    
-    min_date = df_aux['END_TIME'].min()
-    max_date = df_aux['END_TIME'].max()
-    monitoring_date = col1.date_input('Selecione a data de monitoramento:', datetime.date(2024, 2, 9), min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário, mensal e anual.')
+    _, _, daily_credits = credit_billed_day(sum_d, today)
+    _, _, monthly_credits = credit_billed_month(sum_m, today)
+    _, _, yearly_credits = credit_billed_year(sum_m, today)
+    description = "Descrição do produto"
 
-sum_d = credit_sum_d(df2, monitoring_date)
-sum_m = credit_sum_m(df2, monitoring_date)
-
-_, _, daily_credits = credit_billed_day(sum_d, monitoring_date, 'TAG_NAME')
-_, _, monthly_credits = credit_billed_month(sum_m, monitoring_date, 'TAG_NAME')
-_, _, yearly_credits = credit_billed_year(sum_m, monitoring_date, 'TAG_NAME')
-
-score_card_geral(query, col2, daily_credits, monthly_credits, yearly_credits)
-
-container = st.container(border=True)
-col1, col2 = container.columns([0.8, 1], gap="large")
-
-with col1:
-    plot_credit_billed_day(sum_d, monitoring_date, col1, 'TAG_NAME')
-with col2:
-    plot_credit_billed_month(sum_m, monitoring_date, col2, 'TAG_NAME')
-with container:
-    plot_credit_billed_year(sum_m, monitoring_date, container, 'TAG_NAME')
-
-container2 = st.container(border=True)
-col1, col2 = container2.columns([0.8, 1], gap="large")
-
-with col1:
-    mult_rank = col1.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.')
-    selected_products = procces_filter(df2, mult_rank, 'TAG_NAME')
-    ranking_plot(selected_products, col1,  mult_rank)
-with col2:
-    mult_pie = col2.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.', key=1)
-    selected_products = procces_filter(df2, mult_pie, 'TAG_NAME')
-    pie_plot(selected_products, col1,  mult_rank)
+    show_all_products(df_aux, today, daily_credits, monthly_credits, yearly_credits, description)

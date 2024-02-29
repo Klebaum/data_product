@@ -3,8 +3,18 @@ import streamlit as st
 from functions.show_products import show_data_product_1
 from functions.show_products import procces_filter
 query = pd.read_csv('Custo detalhado.csv')
+from st_pages import Page, show_pages, hide_pages
+
+show_pages([
+    Page("catalogo.py","Catálogo"),
+    Page("visao_geral.py","Visão Geral"),
+    Page("monitoramento_de_creditos.py"," ")
+])
+
+hide_pages([' '])
+
 #st.session_state["query"] = query
-st.title('PRODUTOS DO CATÁLOGO')
+# st.title('PRODUTOS DO CATÁLOGO')
 
 dtypes = pd.DataFrame(query).astype({'CREDITS_USED_PER_USER_APROX':'float'}).dtypes.values
 #   return rows, cols, colsN
@@ -88,8 +98,9 @@ df2 = pd.concat([df2, new_row_df, new_row_df2, new_row_df3, new_row_df4], ignore
 
 df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(float)
 list_of_products = df2['TAG_NAME'].unique()
-product = st.selectbox('Selecione o produto: ', list_of_products, help='Selecione o produto para visualizar os detalhes.', index=None,)
-
+#product = st.selectbox('Selecione o produto: ', list_of_products, help='Selecione o produto para visualizar os detalhes.', index=None,)
+#st.write(st.session_state.btn_tag)
+product = st.session_state.btn_tag
 if product != None:
     df2 = df2[df2['TAG_NAME'] == product]
     show_data_product_1(df2, product)
