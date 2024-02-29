@@ -5,6 +5,8 @@ from functions.show_products import procces_filter
 query = pd.read_csv('Custo detalhado.csv')
 from st_pages import Page, show_pages, hide_pages
 
+st.image('https://triggo.ai/assets/LOGO.svg', width=200)
+
 show_pages([
     Page("catalogo.py","Catálogo"),
     Page("visao_geral.py","Visão Geral"),

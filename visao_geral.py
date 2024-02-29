@@ -8,6 +8,8 @@ from functions.credit_func import plot_credit_billed_day, plot_credit_billed_mon
 from functions.show_products import procces_filter
 from st_pages import Page, show_pages, hide_pages
 
+st.image('https://triggo.ai/assets/LOGO.svg', width=200)
+
 query = pd.read_csv('Custo detalhado.csv')
 df2 = pd.DataFrame(query)
 
@@ -101,8 +103,8 @@ container1 = st.container()
 col1, col2 = container1.columns([0.8, 1], gap="large")
 
 title = 'VISÃO GERAL DOS PRODUTOS' 
-col1.title(f'{title}: ')
-col2.title('CRÉDITOS COBRADOS SNOWFLAKE:')
+col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>{title}</b></p>', unsafe_allow_html=True)
+col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
 
 with col1:
     col1.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')

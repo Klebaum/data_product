@@ -28,8 +28,8 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
     n_tables = len(query['OBJ_NAME'].unique())
 
     title = query['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
-    col1.title(f'{title}: ')
-    col2.title('CRÉDITOS COBRADOS SNOWFLAKE:')
+    col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>{title}: </b></p> ', unsafe_allow_html=True)
+    col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
 
     with col1:
         col1.write(f'Owner: {query["OWNER"].unique()[0]}')
@@ -111,7 +111,7 @@ def show_data_product_1(df2, product):
     col1, col2 = container0.columns(2)
 
     title = df2['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
-    col1.title(f'{title}:')
+    col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>{title}:</b></p>', unsafe_allow_html=True)
     col1.header('Monitoramento de Créditos Cobrados')
     col1.subheader('Data de monitoramento e processos: ')
 

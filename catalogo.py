@@ -8,7 +8,9 @@ from functions.show_products import show_all_products
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m
 from st_pages import Page, show_pages, hide_pages
 
-st.set_page_config(layout="wide", )
+st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+
+st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
 show_pages([
     Page("catalogo.py","Catálogo"),
