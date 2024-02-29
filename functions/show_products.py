@@ -7,11 +7,11 @@ from functions.credit_func import credit_sum_m, credit_sum_d, plot_credit_billed
 from functions.credit_func import credit_billed_year, credit_billed_month, credit_billed_day
 from functions.graph_func import make_graph
 
-def procces_filter(query, filters):
+def procces_filter(query, filters, var_to_filter='QUERY_TAG'):
     dfs = [] 
 
     for filter in filters:
-        filtered_df = query[query['QUERY_TAG'] == filter] 
+        filtered_df = query[query[var_to_filter] == filter] 
         dfs.append(filtered_df)  
     concatenated_df = pd.concat(dfs, ignore_index=True) 
     return concatenated_df
@@ -96,80 +96,11 @@ def score_cards(daily_credits, monthly_credits, yearly_credits):
             st.markdown(f'<p class="xmr_text">DAILY<br></p><p class="price_details">{daily_credits}</p>', unsafe_allow_html = True)
 
 
-def show_data_product_1(query):
-    
-    # st.markdown(
-    # """
-    # <style>
-    # [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
-    #     width: 500px;
-    # }
-    # [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
-    #     width: 500px;
-    #     margin-left: -500px;
-    # }
-    # </style>
-    # """,
-    # unsafe_allow_html=True, 
-    # )
-    
-    
-    st.session_state["query"] = query
-    dtypes = pd.DataFrame(query).astype({'CREDITS_USED_PER_USER_APROX':'float'}).dtypes.values
-    #   return rows, cols, colsN
-
-    # rows, cols, colsN = runQuery(query)
-    #st.write(rows)
-    df2 = pd.DataFrame(query)
-
-    new_entry = {
-        'OWNER': 'MERCANTIL',
-        'WAREHOUSE_NAME': 'COMPUTE_WH',
-        'TAG_NAME': 'FORECAST_DATA_PRODUCT',
-        'END_TIME': '2024-02-10',
-        'SOURCE': 'forecast_ml',
-        'QUERY_TAG': 'results',
-        'DATABASE_NAME': 'STREAMLIT_HIERARCHY_VIEWER',
-        'SCHEMA_NAME': 'ML_FORECASTING',
-        'TABLE_VIEW_NAME': 'STREAMLIT_HIERARCHY_VIEWER.ML_FORECASTING.V4_FORECAST',
-        'TAG_VALUE': 'view',
-        'OBJ_NAME': 'V4_FORECAST',
-        'REFRESH_VALUE': 'hourly',
-        'CREDITS_USED_PER_USER_APROX': 0.058
-    }
-
-    new_entry2 = {
-        'OWNER': 'MERCANTIL',
-        'WAREHOUSE_NAME': 'COMPUTE_WH',
-        'TAG_NAME': 'FORECAST_DATA_PRODUCT',
-        'END_TIME': '2024-02-10',
-        'SOURCE': 'forecast_transform',
-        'QUERY_TAG': 'forecast_ml',
-        'DATABASE_NAME': 'STREAMLIT_HIERARCHY_VIEWER',
-        'SCHEMA_NAME': 'ML_FORECASTING',
-        'TABLE_VIEW_NAME': 'STREAMLIT_HIERARCHY_VIEWER.ML_FORECASTING.V4',
-        'TAG_VALUE': 'view',
-        'OBJ_NAME': 'V4',
-        'REFRESH_VALUE': 'hourly',
-        'CREDITS_USED_PER_USER_APROX': 0.58
-    }
-    
-    # Criando um DataFrame a partir da nova entrada
-    new_row_df = pd.DataFrame([new_entry])
-    new_row_df2 = pd.DataFrame([new_entry2])
-    
-    # Concatenando o novo DataFrame com o DataFrame existente
-    df2 = pd.concat([df2, new_row_df, new_row_df2], ignore_index=True)
-
-    df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(float)
-
-    #df = st.dataframe(df2, use_container_width=True)
-    row = st.columns(2)
-
+def show_data_product_1(df2, product):
     container0 = st.container()
     col1, col2 = container0.columns(2)
 
-    title = query['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
+    title = df2['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
     col1.title(f'{title}:')
     col1.header('Monitoramento de Créditos Cobrados')
     col1.subheader('Data de monitoramento e processos: ')
@@ -179,7 +110,7 @@ def show_data_product_1(query):
     df_aux['END_TIME'] = pd.to_datetime(df_aux['END_TIME'])
     
     min_date = df_aux['END_TIME'].min()
-    max_date = df_aux['END_TIME'].max()
+    max_date = df_aux['END_TIME'].max() + pd.Timedelta(days=1)
 
     container1 = st.container()
     col1, col2 = container1.columns(2, gap="large")
@@ -189,7 +120,7 @@ def show_data_product_1(query):
 
     procces = col1_2.multiselect('Selecione o(s) processo(s):', df2['QUERY_TAG'].unique(), df2['QUERY_TAG'].unique(), help='Selecione o processo para filtrar as informações.')
     col2.write('A data de monitoramento ao ser definida, mostrará o gasto diário e do mês da data selecionada.')
-    monitoring_date = col2_2.date_input('Selecione a data de monitoramento:', datetime.date(2024, 2, 9), min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário e total do mês.')
+    monitoring_date = col2_2.date_input('Selecione a data de monitoramento:', value=min_date, min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário e total do mês.')
 
     if len(procces) != 0:
         df_selected_procces = procces_filter(df2, procces)
