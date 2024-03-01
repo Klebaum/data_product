@@ -3,23 +3,85 @@ import plotly.express as px
 import streamlit as st
 pd.options.mode.chained_assignment = None  # default='warn'
 
+def credit_sum_y(df, date_m, var_to_group='QUERY_TAG'):
+    """_summary_
+    
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date_m (datetime.date): date to be used in the analysis.
+
+    Returns:
+        DataFrame: dataframe with the yearly sum of credits billed.
+    """
+    df2 = df.copy()
+    df2['END_TIME'] = pd.to_datetime(df2['END_TIME'])
+    df2['END_TIME'] = df2['END_TIME'].dt.to_period('Y').astype(str)
+    year_sum = df2.groupby(['END_TIME', 'QUERY_TAG', 'TAG_NAME'])['CREDITS_USED_PER_USER_APROX'].sum().reset_index()
+    date_year = pd.to_datetime(date_m).strftime('%Y')
+    year_sum['END_TIME'] = year_sum['END_TIME'].astype(str)
+    year_sum_filtered = year_sum[year_sum['END_TIME'].str.startswith(date_year)]
+
+    return year_sum_filtered
+
 def credit_sum_m(df, date_m):
-    df['END_TIME'] = df['END_TIME'].dt.to_period('D').astype(str)
-    monthly_sum = df.groupby(['END_TIME', 'QUERY_TAG', 'TAG_NAME'])['CREDITS_USED_PER_USER_APROX'].sum().reset_index()
+    """_summary_
+
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date_m (datetime.date): date to be used in the analysis.
+
+    Returns:
+        DataFrame: dataframe with the monthly sum of credits billed.
+    """
+    df2 = df.copy()
+    df2['END_TIME'] = pd.to_datetime(df2['END_TIME'])
+    df2['END_TIME'] = df2['END_TIME'].dt.to_period('D').astype(str)
+    monthly_sum = df2.groupby(['END_TIME', 'QUERY_TAG', 'TAG_NAME'])['CREDITS_USED_PER_USER_APROX'].sum().reset_index()
     date_m_month_year = pd.to_datetime(date_m).strftime('%Y-%m')
     monthly_sum['END_TIME'] = monthly_sum['END_TIME'].astype(str)
     monthly_sum_filtered = monthly_sum[monthly_sum['END_TIME'].str.startswith(date_m_month_year)]
+
     return monthly_sum_filtered
 
 
 def credit_sum_d(df, date_m):
-    df['END_TIME'] = pd.to_datetime(df['END_TIME'])
-    daily_sum = df.groupby([df['END_TIME'].dt.date, 'QUERY_TAG', 'TAG_NAME'])['CREDITS_USED_PER_USER_APROX'].sum().reset_index()
+    """_summary_
+
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date_m (datetime.date): date to be used in the analysis.
+
+    Returns:
+        DataFrame: dataframe with the daily sum of credits billed.
+    """
+    # df2 = df.copy()
+    # df2['END_TIME'] = pd.to_datetime(df2['END_TIME'])
+    # daily_sum = df2.groupby([df2['END_TIME'].dt.date, 'QUERY_TAG', 'TAG_NAME'])['CREDITS_USED_PER_USER_APROX'].sum().reset_index()
+    
+    df2 = df.copy()
+    df2['END_TIME'] = pd.to_datetime(df2['END_TIME'])
+    df2['END_TIME'] = df2['END_TIME'].dt.to_period('D').astype(str)
+    monthly_sum = df2.groupby(['END_TIME', 'QUERY_TAG', 'TAG_NAME'])['CREDITS_USED_PER_USER_APROX'].sum().reset_index()
+    date_m_month_year = pd.to_datetime(date_m).strftime('%Y-%m-%d')
+    monthly_sum['END_TIME'] = monthly_sum['END_TIME'].astype(str)
+    daily_sum = monthly_sum[monthly_sum['END_TIME'].str.startswith(date_m_month_year)]
 
     return daily_sum
 
 
 def credit_billed_year(df, date, var_to_group='QUERY_TAG'):
+    """_summary_
+
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date (datetime.date): date to be used in the analysis.
+        var_to_group (str, optional): variable to group the data. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        DataFrame: dataframe with the credits billed in the year.
+        str: year with the format 'YYYY'.
+        float: total of credits billed in the year.
+    """
     adjust_d = df.copy()
 
     adjust_d['END_TIME'] = pd.to_datetime(adjust_d['END_TIME'])
@@ -39,6 +101,19 @@ def credit_billed_year(df, date, var_to_group='QUERY_TAG'):
 
 
 def credit_billed_month(df, date, var_to_group='QUERY_TAG'):
+    """_summary_
+    
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date (datetime.date): date to be used in the analysis.
+        var_to_group (str, optional): variable to group the data. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        DataFrame: dataframe with the credits billed in the month.
+        str: date with the format 'YYYY/MM'.
+        float: total of credits billed in the month. 
+    """
+    
     adjust_d = df.pivot_table(index='END_TIME', columns=var_to_group, values='CREDITS_USED_PER_USER_APROX', aggfunc='sum')
     adjust_d.reset_index(inplace=True)
 
@@ -54,6 +129,18 @@ def credit_billed_month(df, date, var_to_group='QUERY_TAG'):
 
 
 def credit_billed_day(df, date, var_to_group='QUERY_TAG'):
+    """_summary_
+    
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date (datetime.date): date to be used in the analysis.
+        var_to_group (str, optional): variable to group the data. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        DataFrame: dataframe with the credits billed in the day.
+        str: date with the format 'YYYY/MM/DD'.
+        float: total of credits billed in the day.
+    """
     if df['END_TIME'].dtype != 'object':
         df['END_TIME'] = df['END_TIME'].astype(str)
 
@@ -64,13 +151,26 @@ def credit_billed_day(df, date, var_to_group='QUERY_TAG'):
 
     adjust_d = df_filtered.pivot_table(index=var_to_group, values='CREDITS_USED_PER_USER_APROX',  aggfunc='sum')
     adjust_d.reset_index(inplace=True)
+
     if adjust_d.empty:
-        return adjust_d, date_to_filter, 0
+        return adjust_d, date_to_filter, 0.0
     total_credits = adjust_d['CREDITS_USED_PER_USER_APROX'].sum()  
 
     return adjust_d, date_to_filter, round(total_credits,2)
 
+
 def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
+    """_summary_
+    
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date (datetime.date): date to be used in the analysis.
+        container (streamlit.container): container to plot the graph.
+        var_to_group (str, optional): variable to group the data. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        None: plot the chart bar graph with the credits billed in the year.
+    """
     colors = ['#249edc', '#005b96', '#b3cde0']
     adjust_d, year, _ = credit_billed_year(df, date, var_to_group)
                       
@@ -98,6 +198,18 @@ def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
 
 
 def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
+    """_summary_
+    
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date (datetime.date): date to be used in the analysis.
+        col2 (streamlit.container): container to plot the graph.
+        var_to_group (str, optional): variable to group the data. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        None: plot the chart bar graph with the credits billed in the month.
+    
+    """
     colors = ['#249edc', '#005b96', '#b3cde0']
     adjust_d, date_to_filter, total_credits = credit_billed_month(df, date, var_to_group)
 
@@ -128,6 +240,17 @@ def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
 
 # Plot dos gráficos usando o st.bar_chart
 def plot_credit_billed_day(df, date, col1, var_to_group='QUERY_TAG'):
+    """_summary_
+    
+    Args:
+        df (DataFrame): dataframe with the data to be used in the analysis.
+        date (datetime.date): date to be used in the analysis.
+        col1 (streamlit.container): container to plot the graph.
+        var_to_group (str, optional): variable to group the data. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        None: plot the chart bar graph with the credits billed in the day.
+    """
     adjust_d, date_to_filter, total_credits = credit_billed_day(df, date, var_to_group)
 
     fig = px.bar(adjust_d, x=var_to_group, y='CREDITS_USED_PER_USER_APROX'

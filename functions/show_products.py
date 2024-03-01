@@ -3,7 +3,7 @@ import streamlit as st
 import datetime
 
 import pandas as pd
-from functions.credit_func import credit_sum_m, credit_sum_d, plot_credit_billed_day, plot_credit_billed_month, plot_credit_billed_year
+from functions.credit_func import credit_sum_m, credit_sum_d, credit_sum_y, plot_credit_billed_day, plot_credit_billed_month, plot_credit_billed_year
 from functions.credit_func import credit_billed_year, credit_billed_month, credit_billed_day
 from functions.graph_func import make_graph
 from streamlit_extras.switch_page_button import switch_page
@@ -11,6 +11,17 @@ from st_pages import Page, show_pages, hide_pages
 
 
 def procces_filter(query, filters, var_to_filter='QUERY_TAG'):
+    """_summary_
+
+    Args:
+        query (DataFrame): pandas DataFrame
+        filters (list): filters to be applied to the query DataFrame.
+        var_to_filter (str, optional): _description_. Defaults to 'QUERY_TAG'.
+
+    Returns:
+        DataFrame: dataframe with the filters applied.
+    """
+    
     dfs = [] 
 
     for filter in filters:
@@ -20,6 +31,19 @@ def procces_filter(query, filters, var_to_filter='QUERY_TAG'):
     return concatenated_df
 
 def show_all_products(query, today, daily_credits, monthly_credits, yearly_credits, description):
+    """_summary_
+    
+    Args:
+        query (DataFrame): pandas DataFrame
+        today (datetime): date to be used in the analysis.
+        daily_credits (float): daily credits to be used in the analysis.
+        monthly_credits (float): monthly credits to be used in the analysis.
+        yearly_credits (float): yearly credits to be used in the analysis.
+        description (str): description of the data product.
+    
+    Returns:
+        None: all products are shown in the page.
+    """
     today = pd.to_datetime(today).strftime('%Y/%m/%d')
     
     container1 = st.container(border=True)
@@ -68,14 +92,24 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
 
         with eth_col:
             with st.container(border=True):
-                st.markdown(f'<p class="eth_text">MONTHLY<br></p><p class="price_details">{monthly_credits}</p>', unsafe_allow_html = True)
+                st.markdown(f'<p class="eth_text">MENSAL<br></p><p class="price_details">{monthly_credits}</p>', unsafe_allow_html = True)
 
         with xmr_col:
             with st.container(border=True):
-                st.markdown(f'<p class="xmr_text">DAILY<br></p><p class="price_details">{daily_credits}</p>', unsafe_allow_html = True)
+                st.markdown(f'<p class="xmr_text">DIÁRIO<br></p><p class="price_details">{daily_credits}</p>', unsafe_allow_html = True)
 
 
 def score_cards(daily_credits, monthly_credits, yearly_credits):
+    """_summary_
+    
+    Args:
+        daily_credits (float): daily credits to be used in the analysis.
+        monthly_credits (float): monthly credits to be used in the analysis.
+        yearly_credits (float): yearly credits to be used in the analysis.
+
+    Returns:
+        None: score cards are shown in the page.
+    """
     st.markdown(
         """
         <style>
@@ -99,14 +133,23 @@ def score_cards(daily_credits, monthly_credits, yearly_credits):
 
     with eth_col:
         with st.container(border=True):
-            st.markdown(f'<p class="eth_text">MONTHLY<br></p><p class="price_details">{monthly_credits}</p>', unsafe_allow_html = True)
+            st.markdown(f'<p class="eth_text">MENSAL<br></p><p class="price_details">{monthly_credits}</p>', unsafe_allow_html = True)
 
     with xmr_col:
         with st.container(border=True):
-            st.markdown(f'<p class="xmr_text">DAILY<br></p><p class="price_details">{daily_credits}</p>', unsafe_allow_html = True)
+            st.markdown(f'<p class="xmr_text">DIÁRIO<br></p><p class="price_details">{daily_credits}</p>', unsafe_allow_html = True)
 
 
 def show_data_product_1(df2, product):
+    """_summary_
+
+    Args:
+        df2 (DataFrame): pandas DataFrame
+        product (str): product to be shown in the page.
+
+    Returns:
+        None: data product is shown in the page with Snowflake credit monitor.
+    """
     container0 = st.container()
     col1, col2 = container0.columns(2)
 
@@ -136,10 +179,11 @@ def show_data_product_1(df2, product):
         df_selected_procces = procces_filter(df2, procces)
         sum_d = credit_sum_d(df_selected_procces, monitoring_date) 
         sum_m = credit_sum_m(df_selected_procces, monitoring_date)
+        sum_y = credit_sum_y(df_selected_procces, monitoring_date)
 
         _, _, daily_credits = credit_billed_day(sum_d, monitoring_date)
         _, _, monthly_credits = credit_billed_month(sum_m, monitoring_date)
-        _, _, yearly_credits = credit_billed_year(sum_m, monitoring_date)
+        _, _, yearly_credits = credit_billed_year(sum_y, monitoring_date)
 
         score_cards(daily_credits, monthly_credits, yearly_credits)
 

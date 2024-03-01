@@ -1,6 +1,14 @@
 from graphviz import Digraph
 
 def make_graph(df):
+    """_summary_
+
+    Args:
+        df (DataFrame): dataframe to be used in the graph.
+
+    Returns:
+        graphviz element: graphviz element with the graph.
+    """
     dot = Digraph(graph_attr={'rankdir': 'LR', 'bgcolor': '#ffffff'})
 
     df_graph = df.groupby(['QUERY_TAG', 'SOURCE', 'REFRESH_VALUE']).agg({

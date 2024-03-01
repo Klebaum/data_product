@@ -5,7 +5,7 @@ from datetime import date
 import plotly.express as px
 # from snowflake.snowpark.context import get_active_session
 from functions.show_products import show_all_products
-from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m
+from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from st_pages import Page, show_pages, hide_pages
 
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
@@ -94,13 +94,12 @@ new_entry4 = {
     'CREDITS_USED_PER_USER_APROX': 0.58
 }
 
-# Criando um DataFrame a partir da nova entrada
+
 new_row_df = pd.DataFrame([new_entry])
 new_row_df2 = pd.DataFrame([new_entry2])
 new_row_df3 = pd.DataFrame([new_entry3])
 new_row_df4 = pd.DataFrame([new_entry4])
 
-# Concatenando o novo DataFrame com o DataFrame existente
 df2 = pd.concat([df2, new_row_df, new_row_df2, new_row_df3, new_row_df4], ignore_index=True)
 
 
@@ -115,10 +114,11 @@ for product in list_products:
 
     sum_d = credit_sum_d(df_aux, today)
     sum_m = credit_sum_m(df_aux, today)
-
+    sum_y = credit_sum_y(df_aux, today)
+    
     _, _, daily_credits = credit_billed_day(sum_d, today)
     _, _, monthly_credits = credit_billed_month(sum_m, today)
-    _, _, yearly_credits = credit_billed_year(sum_m, today)
+    _, _, yearly_credits = credit_billed_year(sum_y, today)
     description = "Descrição do produto"
 
     show_all_products(df_aux, today, daily_credits, monthly_credits, yearly_credits, description)
