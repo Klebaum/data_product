@@ -3,12 +3,18 @@ import streamlit as st
 import datetime
 from datetime import date
 import plotly.express as px
-# from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark import Session
+from snowflake.snowpark.context import get_active_session
 from functions.show_products import show_all_products
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from st_pages import Page, show_pages, hide_pages
+from sessions_func.create_session import runQuery
+
 
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+
+query = "select owner, tag_name, obj_name, tag_value, end_time, source, query_tag, refresh_value, credits_used_per_user_aprox from streamlit_hierarchy_viewer.ml_forecasting.FORECAST_PRODUCT_v2 order by query_tag;"
+data = runQuery(query)
 
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
@@ -23,11 +29,10 @@ hide_pages([' '])
 # key to btn
 st.session_state.key_value = 0 
 
-# query = "select owner, tag_name, obj_name, tag_value, end_time, source, query_tag, refresh_value, credits_used_per_user_aprox from streamlit_hierarchy_viewer.ml_forecasting.FORECAST_PRODUCT_v2 order by query_tag;"
-query = pd.read_csv('Custo detalhado.csv')
+#query = pd.read_csv('Custo detalhado.csv')
 
-df2 = pd.DataFrame(query)
-st.session_state["query"] = query
+df2 = pd.DataFrame(data)
+st.session_state.query = df2
 
 # Dados sintéticos
 new_entry = {
