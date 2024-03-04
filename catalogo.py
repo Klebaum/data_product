@@ -9,7 +9,7 @@ from functions.show_products import show_all_products
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from st_pages import Page, show_pages, hide_pages
 from sessions_func.create_session import runQuery
-
+from st_keyup import st_keyup
 
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
@@ -113,7 +113,15 @@ df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(f
 today = date.today()
 
 list_products = df2['TAG_NAME'].unique()
- 
+
+filter = st_keyup("Pesquisar Produto")
+
+# filtro que a partir do que é digitado no search, ele filtre os produtos que contém o que foi digitado
+# e mostre apenas esses produtos
+df_aux = df2[df2['TAG_NAME'].str.startswith(filter.upper(), len(filter))]
+# st.write(df_aux['TAG_NAME'].unique())
+list_products = df_aux['TAG_NAME'].unique()
+
 for product in list_products:
     df_aux = df2[df2['TAG_NAME'] == product]
 
@@ -127,3 +135,6 @@ for product in list_products:
     description = "Descrição do produto"
 
     show_all_products(df_aux, today, daily_credits, monthly_credits, yearly_credits, description)
+
+
+
