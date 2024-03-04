@@ -8,7 +8,7 @@ from st_pages import Page, show_pages, hide_pages
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
 show_pages([
-    Page("catalogo.py","Catálogo"),
+    Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
     Page("monitoramento_de_creditos.py"," ")
 ])

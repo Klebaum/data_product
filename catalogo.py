@@ -19,7 +19,7 @@ data = runQuery(query)
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
 show_pages([
-    Page("catalogo.py","Catálogo"),
+    Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
     Page("monitoramento_de_creditos.py"," ")
 ])

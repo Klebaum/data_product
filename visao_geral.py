@@ -14,7 +14,7 @@ query = pd.read_csv('Custo detalhado.csv')
 df2 = pd.DataFrame(query)
 
 show_pages([
-    Page("catalogo.py","Catálogo"),
+    Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
     Page("monitoramento_de_creditos.py"," ")
 ])
