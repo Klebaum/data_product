@@ -137,9 +137,15 @@ col1, col2 = container2.columns([0.8, 1], gap="large")
 
 with col1:
     mult_rank = col1.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.')
-    selected_products = procces_filter(df2, mult_rank, 'TAG_NAME')
-    ranking_plot(selected_products, col1,  mult_rank)
+    try:
+        selected_products = procces_filter(df2, mult_rank, 'TAG_NAME')
+        ranking_plot(selected_products, col1,  mult_rank)
+    except ValueError:
+        col1.error('Selecione um produto para visualizar o ranking.')
 with col2:
     mult_pie = col2.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.', key=1)
-    selected_products = procces_filter(df2, mult_pie, 'TAG_NAME')
-    pie_plot(selected_products, col1,  mult_rank)
+    try:
+        selected_products = procces_filter(df2, mult_pie, 'TAG_NAME')
+        pie_plot(selected_products, col1,  mult_rank)
+    except ValueError:
+        col2.error('Selecione um produto para visualizar a porcentagem de consumo de cada produto.')
