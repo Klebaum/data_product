@@ -192,7 +192,7 @@ def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
                        font=dict(color='black', size=16),
                        xanchor='center', yanchor='bottom')
 
-    container.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>Créditos cobrados em {year}</b></p>', unsafe_allow_html=True)
+    container.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {year}</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='Mês e Ano', yaxis_title='Créditos Cobrados')
     st.plotly_chart(fig, use_container_width=True)
 
@@ -233,7 +233,7 @@ def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
                        font=dict(color='black', size=16),
                        xanchor='center', yanchor='bottom')
 
-    col2.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>Créditos cobrados em {date_to_filter}</b></p>', unsafe_allow_html=True)
+    col2.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {date_to_filter}</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='DATA', yaxis_title='CRÉDITOS COBRADOS')
     st.plotly_chart(fig, use_container_width=True)
 
@@ -279,6 +279,6 @@ def plot_credit_billed_day(df, date, col1, var_to_group='QUERY_TAG'):
     yanchor='top' 
     )
 
-    col1.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>Créditos cobrados em {date_to_filter}</b></p>', unsafe_allow_html=True)
+    col1.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {date_to_filter}</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='PROCESSOS', yaxis_title='CRÉDITOS COBRADOS')
     st.plotly_chart(fig, use_container_width=True)

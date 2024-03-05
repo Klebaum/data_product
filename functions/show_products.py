@@ -52,8 +52,8 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
     n_tables = len(query['OBJ_NAME'].unique())
 
     title = query['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
-    col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>{title}: </b></p> ', unsafe_allow_html=True)
-    col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
+    col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>{title}: </b></p> ', unsafe_allow_html=True)
+    col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
 
     with col1:
         col1.write(f'Owner: {query["OWNER"].unique()[0]}')
@@ -154,9 +154,8 @@ def show_data_product_1(df2, product):
     col1, col2 = container0.columns(2)
 
     title = df2['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
-    col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>{title}:</b></p>', unsafe_allow_html=True)
-    col1.header('Monitoramento de Créditos Cobrados')
-    col1.subheader('Data de monitoramento e processos: ')
+    col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 30px;"><b>{title}:</b></p>', unsafe_allow_html=True)
+
 
     # Definindo min e max para o date_input
     df_aux = df2.copy()
@@ -169,9 +168,11 @@ def show_data_product_1(df2, product):
     col1, col2 = container1.columns(2, gap="large")
     container1_2 = st.container()
     col1_2, col2_2 = container1_2.columns(2, gap="large")
-    col1.write('Processos que fazem parte do Data Product.')
+    
+    col1.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 25px;"><b>Monitoramento de Créditos Cobrados</b></p>', unsafe_allow_html=True)
 
-    procces = col1_2.multiselect('Selecione o(s) processo(s):', df2['QUERY_TAG'].unique(), df2['QUERY_TAG'].unique(), help='Selecione o processo para filtrar as informações.')
+    procces = col1_2.multiselect('Selecione o(s) processo(s)que fazem parte do Data Product:', df2['QUERY_TAG'].unique(), df2['QUERY_TAG'].unique(), help='Selecione o processo para filtrar as informações.')
+    col2.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 25px;"><b>Data de monitoramento e processos: </b></p>', unsafe_allow_html=True)
     col2.write('A data de monitoramento ao ser definida, mostrará o gasto diário e do mês da data selecionada.')
     monitoring_date = col2_2.date_input('Selecione a data de monitoramento:', value=min_date, min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário e total do mês.')
 
@@ -198,13 +199,13 @@ def show_data_product_1(df2, product):
         with container2:
             plot_credit_billed_year(sum_m, monitoring_date, container2)
     container3 = st.container(border=True)
-    container3.subheader('Fluxograma de Processos mensal:')
+    container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos mensal</b></p>', unsafe_allow_html=True)
     dot = make_graph(df2)    
     container3.graphviz_chart(dot)
 
     date_to_filter = pd.to_datetime(monitoring_date).strftime('%Y-%m-%d')
     df_daily_graph = df2[df2['END_TIME'] == date_to_filter]
     # st.write(df2)
-    container3.subheader('Fluxograma de Processos diário:')
+    container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
     dot = make_graph(df_daily_graph)
     container3.graphviz_chart(dot)

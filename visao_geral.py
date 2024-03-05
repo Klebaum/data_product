@@ -102,8 +102,8 @@ container1 = st.container()
 col1, col2 = container1.columns([0.8, 1], gap="large")
 
 title = 'VISÃO GERAL DOS PRODUTOS' 
-col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>{title}</b></p>', unsafe_allow_html=True)
-col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 45px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
+col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>{title}</b></p>', unsafe_allow_html=True)
+col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
 
 with col1:
     col1.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
