@@ -59,17 +59,22 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
         col1.write(f'Owner: {query["OWNER"].unique()[0]}')
         col1.write(f'Quantidade de objetos: {n_tables}')
         col1.write(f'Tempo de atualização: {query["REFRESH_VALUE"].unique()[0]}')
-        col1.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
+        query['END_TIME'] = pd.to_datetime(query['END_TIME'])
+        max_date = query['END_TIME'].max()
+        max_date = pd.to_datetime(max_date).strftime('%Y/%m/%d')
+        col1.write(f'Última data de atualização: {max_date}')
         
         st.session_state.key_value += 1
         if st.button('Análise de créditos cobrados do produto', key=st.session_state.key_value):
             st.session_state.btn_tag = query['TAG_NAME'].unique()[0]
             switch_page(' ')
 
-    with container1.expander('Detalhes das informações do produto'):
+    with container1.expander('Descrição do produto'):
         aux = (f'As informações foram retiradas a partir de um trabalho de "Tagging" dos objetos e processos'+
                 f' realizados no Snowflake para o {title}. Os objetos são atualizados a cada hora.')
         st.write(aux)
+        st.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
+
         
     col2.write(f'Créditos cobrados na data atual {today}:')
     with col2:
