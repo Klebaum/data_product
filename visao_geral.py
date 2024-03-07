@@ -16,10 +16,13 @@ df2 = pd.DataFrame(query)
 show_pages([
     Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
-    Page("monitoramento_de_creditos.py"," ")
+    Page("reg_prod_2.py", "Registro de Produtos 2"),
+    Page("monitoramento_de_creditos.py", " "),
+    Page("monitoramento_de_creditos_2.py", "  ")
 ])
 
-hide_pages([' '])
+
+hide_pages([' ', '  '])
 
 # Dados sintéticos
 new_entry = {

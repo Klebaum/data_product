@@ -10,19 +10,15 @@ st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 show_pages([
     Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
-    Page("monitoramento_de_creditos.py"," ")
+    Page("reg_prod_2.py", "Registro de Produtos 2"),
+    Page("monitoramento_de_creditos.py", " "),
+    Page("monitoramento_de_creditos_2.py", "  ")
 ])
 
 hide_pages([' '])
 
-#st.session_state["query"] = query
-# st.title('PRODUTOS DO CATÁLOGO')
-
 dtypes = pd.DataFrame(query).astype({'CREDITS_USED_PER_USER_APROX':'float'}).dtypes.values
-#   return rows, cols, colsN
 
-# rows, cols, colsN = runQuery(query)
-#st.write(rows)
 df2 = pd.DataFrame(query)
 
 new_entry = {
@@ -99,7 +95,10 @@ new_row_df4 = pd.DataFrame([new_entry4])
 df2 = pd.concat([df2, new_row_df, new_row_df2, new_row_df3, new_row_df4], ignore_index=True)
 
 df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(float)
+df2['TAG_NAME'] = df2['TAG_NAME'].str.replace('_', ' ')
+
 list_of_products = df2['TAG_NAME'].unique()
+
 #product = st.selectbox('Selecione o produto: ', list_of_products, help='Selecione o produto para visualizar os detalhes.', index=None,)
 #st.write(st.session_state.btn_tag)
 product = st.session_state.btn_tag
