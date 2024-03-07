@@ -256,7 +256,7 @@ def show_data_product_1(df2, product):
     df_aux['END_TIME'] = pd.to_datetime(df_aux['END_TIME'])
     
     min_date = df_aux['END_TIME'].min()
-    max_date = df_aux['END_TIME'].max() + pd.Timedelta(days=1)
+    max_date = df_aux['END_TIME'].max() #+ pd.Timedelta(days=1)
 
     container1 = st.container()
     col1, col2 = container1.columns(2, gap="large")
@@ -381,7 +381,7 @@ def show_data_product_2(df2, product, today, daily_credits, monthly_credits, yea
     df_aux['END_TIME'] = pd.to_datetime(df_aux['END_TIME'])
     
     min_date = df_aux['END_TIME'].min()
-    max_date = df_aux['END_TIME'].max() + pd.Timedelta(days=1)
+    max_date = df_aux['END_TIME'].max() #+ pd.Timedelta(days=1)
 
     container1 = st.container()
     col1, col2 = container1.columns(2, gap="large")
