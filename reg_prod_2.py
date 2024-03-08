@@ -114,4 +114,4 @@ df_aux = df2[df2['TAG_NAME'].str.startswith(filter.upper(), len(filter))]
 # st.write(df_aux['TAG_NAME'].unique())
 list_products = df_aux['TAG_NAME'].unique()
 
-show_all(df_aux, today, 1, 1, 1, 'asd')
+show_all(df_aux)

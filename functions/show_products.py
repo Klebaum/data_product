@@ -10,7 +10,7 @@ from streamlit_extras.switch_page_button import switch_page
 from st_pages import Page, show_pages, hide_pages
 
 
-def show_all(query, today, daily_credits, monthly_credits, yearly_credits, description):
+def show_all(query):
     """_summary_
     
     Args:
@@ -62,8 +62,10 @@ def show_all(query, today, daily_credits, monthly_credits, yearly_credits, descr
         title = product.replace('_', ' ')
         containerh = my_grid.container(border=True)
         containerh.markdown(f"<p class='custom-container'>{title}</p>", unsafe_allow_html=True)
-        containerh.markdown("<p class='centered-image'><img src='https://triggo.ai/assets/LOGO.svg' width='150'></p>", unsafe_allow_html=True)
-        containerh.markdown("<p class='custom-text'>A descrição do produto viria aqui onde<br/><br/><br/><br/>podemos colocar algo bem resumido</p>", unsafe_allow_html=True)
+        containerh.markdown("<p class='centered-image'><img src='https://triggo.ai/assets/LOGO.svg' width='150' height='75'></p>", unsafe_allow_html=True)
+        #containerh.markdown("<p class='custom-text'>A descrição do produto viria aqui onde<br/><br/><br/><br/>podemos colocar algo bem resumido</p>", unsafe_allow_html=True)
+        containerh.write("A descrição do produto viria aqui onde podemos colocar algo bem resumido")
+        
         containerh.columns([1, 1], gap="small")
 
         st.session_state.key_value_2 += 1
@@ -75,8 +77,8 @@ def show_all(query, today, daily_credits, monthly_credits, yearly_credits, descr
         title = product.replace('_', ' ')
         containerh = my_grid.container(border=True)
         containerh.markdown(f"<p class='custom-container'>{title}</p>", unsafe_allow_html=True)
-        containerh.markdown("<p class='centered-image'><img src='https://triggo.ai/assets/LOGO.svg' width='150'></p>", unsafe_allow_html=True)
-        containerh.markdown("<p class='custom-text'>A descrição do produto viria aqui onde<br/><br/><br/><br/>podemos colocar algo bem resumido</p>", unsafe_allow_html=True)
+        containerh.markdown("<p class='centered-image'><img src='https://www.vectorlogo.zone/logos/snowflake/snowflake-ar21.svg' width='150' height='75'></p>", unsafe_allow_html=True)
+        containerh.write("A descrição do produto viria aqui onde podemos colocar algo bem resumido")
         containerh.columns([1, 1], gap="small")
 
         st.session_state.key_value_2 += 1
@@ -88,8 +90,8 @@ def show_all(query, today, daily_credits, monthly_credits, yearly_credits, descr
         title = product.replace('_', ' ')
         containerh = my_grid.container(border=True)
         containerh.markdown(f"<p class='custom-container'>{title}</p>", unsafe_allow_html=True)
-        containerh.markdown("<p class='centered-image'><img src='https://triggo.ai/assets/LOGO.svg' width='150'></p>", unsafe_allow_html=True)
-        containerh.markdown("<p class='custom-text'>A descrição do produto viria aqui onde<br/><br/><br/><br/>podemos colocar algo bem resumido</p>", unsafe_allow_html=True)
+        containerh.markdown("<p class='centered-image'><img src='https://triggo.ai/assets/LOGO.svg' width='150' height='75'></p>", unsafe_allow_html=True)
+        containerh.write("A descrição do produto viria aqui onde podemos colocar algo bem resumido")        
         containerh.columns([1, 1], gap="small")
 
         st.session_state.key_value_2 += 1
