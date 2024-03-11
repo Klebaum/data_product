@@ -166,7 +166,7 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
         st.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
 
         
-    col2.write(f'Créditos cobrados na data atual {today}:')
+    col2.write(f'Créditos cobrados em {today}:')
     with col2:
         st.markdown(
         """
@@ -337,8 +337,7 @@ def show_data_product_2(df2, product, today, daily_credits, monthly_credits, yea
         max_date = pd.to_datetime(max_date).strftime('%Y/%m/%d')
         col1.write(f'Última data de atualização: {max_date}')
 
-    with container_a:
-        st.write('Descrição do produto:')
+    with container_a.expander('Descrição do produto'):
         aux = (f'As informações foram retiradas a partir de um trabalho de "Tagging" dos objetos e processos'+
                 f' realizados no Snowflake para o {title}. Os objetos são atualizados a cada hora.'
                 +' O produto tem como objetivo Prever vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')

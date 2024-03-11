@@ -193,7 +193,7 @@ def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
                        xanchor='center', yanchor='bottom')
 
     container.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {year}</b></p>', unsafe_allow_html=True)
-    fig.update_layout(xaxis_title='Mês e Ano', yaxis_title='Créditos Cobrados')
+    fig.update_layout(xaxis_title='MÊS E ANO', yaxis_title='CRÉDITOS COBRADOS')
     st.plotly_chart(fig, use_container_width=True)
 
 
