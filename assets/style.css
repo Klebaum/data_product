@@ -20,7 +20,7 @@
 
 .price_details {
     font-family: Source Sans Pro;
-    font-size: 30px; 
+    font-size: 20px; 
     color: #3d3d3c;
     font-weight: 900;
     text-align: center;
@@ -30,7 +30,7 @@
 
 .btc_text {
     font-family: Source Sans Pro;
-    font-size: 14px; 
+    font-size: 16px; 
     color: #29b5e8;
     font-weight: bold;
     text-align: center;
@@ -40,7 +40,7 @@
 
 .eth_text {
     font-family: Source Sans Pro;
-    font-size: 14px; 
+    font-size: 16px; 
     color: #29b5e8;
     font-weight: bold;
     text-align: center;
@@ -50,7 +50,7 @@
 
 .xmr_text {
     font-family: Source Sans Pro;
-    font-size: 14px; 
+    font-size: 16px; 
     color: #29b5e8;
     font-weight: bold;
     text-align: center;

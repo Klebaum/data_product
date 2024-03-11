@@ -114,18 +114,35 @@ def credit_billed_month(df, date, var_to_group='QUERY_TAG'):
         float: total of credits billed in the month. 
     """
     
-    adjust_d = df.pivot_table(index='END_TIME', columns=var_to_group, values='CREDITS_USED_PER_USER_APROX', aggfunc='sum')
-    adjust_d.reset_index(inplace=True)
+    # adjust_d = df.pivot_table(index='END_TIME', columns=var_to_group, values='CREDITS_USED_PER_USER_APROX', aggfunc='sum')
+    # adjust_d.reset_index(inplace=True)
 
-    # Convert 'END_TIME' to date format
-    adjust_d['END_TIME'] = pd.to_datetime(adjust_d['END_TIME']).dt.date
+    # # Convert 'END_TIME' to date format
+    # adjust_d['END_TIME'] = pd.to_datetime(adjust_d['END_TIME']).dt.date
     
-    date_to_filter = pd.to_datetime(date).strftime('%Y/%m')
+    # date_to_filter = pd.to_datetime(date).strftime('%Y/%m')
     
-    adjust_d['Total'] = adjust_d[df[var_to_group].unique()].sum(axis=1)
-    total_credits = adjust_d['Total'].sum()
+    # adjust_d['Total'] = adjust_d[df[var_to_group].unique()].sum(axis=1)
+    # total_credits = adjust_d['Total'].sum()
 
-    return adjust_d, date_to_filter, round(total_credits, 2)
+    # return adjust_d, date_to_filter, round(total_credits, 2)
+
+    adjust_d = df.copy()
+
+    adjust_d['END_TIME'] = pd.to_datetime(adjust_d['END_TIME'])
+    
+    year = pd.to_datetime(date).year
+    adjust_d = adjust_d[adjust_d['END_TIME'].dt.year == year]
+
+    adjust_d['Day'] = adjust_d['END_TIME'].dt.strftime('%Y-%m-%d') 
+
+    adjust_d = adjust_d.groupby(['Day', var_to_group]).agg({'CREDITS_USED_PER_USER_APROX': 'sum'}).reset_index()
+
+    # st.write(adjust_d)
+
+    val_total = round(adjust_d["CREDITS_USED_PER_USER_APROX"].sum(), 2)
+
+    return adjust_d, year, val_total
 
 
 def credit_billed_day(df, date, var_to_group='QUERY_TAG'):
@@ -182,14 +199,15 @@ def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
 
     fig = px.bar(adjust_d, x='MonthYear', y='CREDITS_USED_PER_USER_APROX', 
                  color=var_to_group, color_discrete_map=color_map,
-                 labels={'MonthYear': 'Mês e Ano', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'}
+                 labels={'MonthYear': 'Mês e Ano', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'},
+                 width=600, height=300
                 )
     fig.update_xaxes(type='category')
 
     fig.add_annotation(x=adjust_d['MonthYear'].iloc[-1], y='CREDITS_USED_PER_USER_APROX',
                        text='',
                        showarrow=False,
-                       font=dict(color='black', size=16),
+                       font=dict(color='black', size=10),
                        xanchor='center', yanchor='bottom')
 
     container.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {year}</b></p>', unsafe_allow_html=True)
@@ -221,13 +239,13 @@ def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
     color_map = dict(zip(unique_tags, colors))
 
     # Plotting with Plotly
-    fig = px.bar(adjust_d, x='END_TIME', y=df[var_to_group],
-                 color_discrete_map=color_map)
+    fig = px.bar(adjust_d, x='Day', y='CREDITS_USED_PER_USER_APROX', color=var_to_group,
+                 color_discrete_map=color_map, width=600, height=300, labels={'Day': 'Dia', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'})
 
     fig.update_xaxes(type='category')
 
     # Add total value annotation
-    fig.add_annotation(x=adjust_d['END_TIME'].iloc[-1], y=total_credits,
+    fig.add_annotation(x=adjust_d['Day'].iloc[-1], y=total_credits,
                        text='',
                        showarrow=False,
                        font=dict(color='black', size=16),
@@ -254,7 +272,7 @@ def plot_credit_billed_day(df, date, col1, var_to_group='QUERY_TAG'):
     adjust_d, date_to_filter, total_credits = credit_billed_day(df, date, var_to_group)
 
     fig = px.bar(adjust_d, x=var_to_group, y='CREDITS_USED_PER_USER_APROX'
-                 ,color_discrete_sequence=['#249edc'])
+                 ,color_discrete_sequence=['#249edc'], width=600, height=300)
     
     # Add text labels on top of each bar
     for i in range(len(adjust_d)):

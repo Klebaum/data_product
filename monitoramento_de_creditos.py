@@ -8,9 +8,9 @@ from st_pages import Page, show_pages, hide_pages
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
 show_pages([
-    Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
-    Page("reg_prod_2.py", "Registro de Produtos 2"),
+    Page("catalogo.py","Dataproduct Mercantil"),
+    Page("reg_prod_2.py", "Dataproduct Mercantil - opção 2"),
     Page("monitoramento_de_creditos.py", " "),
     Page("monitoramento_de_creditos_2.py", "  ")
 ])
@@ -56,7 +56,7 @@ new_entry2 = {
 new_entry3 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'PRODUTO_A',
+    'TAG_NAME': 'ANÁLISE_CRÉDITO',
     'END_TIME': '2024-02-09',
     'SOURCE': 'procces_1',
     'QUERY_TAG': 'result',
@@ -72,7 +72,7 @@ new_entry3 = {
 new_entry4 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'PRODUTO_B',
+    'TAG_NAME': 'ANÁLISE_AR',
     'END_TIME': '2024-02-10',
     'SOURCE': 'procces_2',
     'QUERY_TAG': 'procces_1',

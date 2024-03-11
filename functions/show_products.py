@@ -69,7 +69,7 @@ def show_all(query):
         containerh.columns([1, 1], gap="small")
 
         st.session_state.key_value_2 += 1
-        if containerh.button('Análise de créditos', key=st.session_state.key_value_2, use_container_width=True):
+        if containerh.button('Detalhamento do produto', key=st.session_state.key_value_2, use_container_width=True):
             st.session_state.btn_tag_2 = product
             switch_page('  ')
     
@@ -155,7 +155,7 @@ def show_all_products(query, today, daily_credits, monthly_credits, yearly_credi
         col1.write(f'Última data de atualização: {max_date}')
         
         st.session_state.key_value += 1
-        if st.button('Análise de créditos cobrados do produto', key=st.session_state.key_value):
+        if st.button('Detalhamento do produto', key=st.session_state.key_value):
             st.session_state.btn_tag = query['TAG_NAME'].unique()[0]
             switch_page(' ')
 
@@ -290,19 +290,19 @@ def show_data_product_1(df2, product):
             plot_credit_billed_day(sum_d, monitoring_date, col1)
         with col2:
             plot_credit_billed_month(sum_m, monitoring_date, col2)
-        with container2:
-            plot_credit_billed_year(sum_m, monitoring_date, container2)
+        with col1:
+            plot_credit_billed_year(sum_m, monitoring_date, col1)
     container3 = st.container(border=True)
-    container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos mensal</b></p>', unsafe_allow_html=True)
+    col2.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos mensal</b></p>', unsafe_allow_html=True)
     dot = make_graph(df2)    
-    container3.graphviz_chart(dot)
+    col2.graphviz_chart(dot)
 
     date_to_filter = pd.to_datetime(monitoring_date).strftime('%Y-%m-%d')
     df_daily_graph = df2[df2['END_TIME'] == date_to_filter]
     # st.write(df2)
-    container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
+    col2.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
     dot = make_graph(df_daily_graph)
-    container3.graphviz_chart(dot)
+    col2.graphviz_chart(dot)
 
 
 def show_data_product_2(df2, product, today, daily_credits, monthly_credits, yearly_credits, description):

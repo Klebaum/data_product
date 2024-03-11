@@ -14,9 +14,9 @@ query = pd.read_csv('Custo detalhado.csv')
 df2 = pd.DataFrame(query)
 
 show_pages([
-    Page("catalogo.py","Registro de Produtos"),
     Page("visao_geral.py","Visão Geral"),
-    Page("reg_prod_2.py", "Registro de Produtos 2"),
+    Page("catalogo.py","Dataproduct Mercantil"),
+    Page("reg_prod_2.py", "Dataproduct Mercantil - opção 2"),
     Page("monitoramento_de_creditos.py", " "),
     Page("monitoramento_de_creditos_2.py", "  ")
 ])
@@ -60,7 +60,7 @@ new_entry2 = {
 new_entry3 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'PRODUTO_A',
+    'TAG_NAME': 'ANÁLISE_CRÉDITO',
     'END_TIME': '2024-02-09',
     'SOURCE': 'procces_1',
     'QUERY_TAG': 'result',
@@ -76,7 +76,7 @@ new_entry3 = {
 new_entry4 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'PRODUTO_B',
+    'TAG_NAME': 'ANÁLISE_AR',
     'END_TIME': '2024-02-10',
     'SOURCE': 'procces_2',
     'QUERY_TAG': 'procces_1',
@@ -109,8 +109,6 @@ col1.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif
 col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 28px;"><b>CRÉDITOS COBRADOS SNOWFLAKE:</b></p>', unsafe_allow_html=True)
 
 with col1:
-    col1.write('Descrição: Previsão de vendas da loja X para os itens de jaqueta e guarda-chuva, com base no histórico de vendas e dados climáticos.')
-    
     min_date = df_aux['END_TIME'].min()
     max_date = df_aux['END_TIME'].max()
     monitoring_date = col1.date_input('Selecione a data de monitoramento:', datetime.date(2024, 2, 9), min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário, mensal e anual.')
@@ -129,17 +127,17 @@ container = st.container(border=True)
 col1, col2 = container.columns([0.8, 1], gap="large")
 
 with col1:
-    plot_credit_billed_day(sum_d, monitoring_date, col1, 'TAG_NAME')
+    plot_credit_billed_month(sum_m, monitoring_date, col1, 'TAG_NAME')
 with col2:
-    plot_credit_billed_month(sum_m, monitoring_date, col2, 'TAG_NAME')
-with container:
-    plot_credit_billed_year(sum_m, monitoring_date, container, 'TAG_NAME')
+    plot_credit_billed_year(sum_m, monitoring_date, col2, 'TAG_NAME')
 
 container2 = st.container(border=True)
 col1, col2 = container2.columns([0.8, 1], gap="large")
 
 with col1:
+  
     mult_rank = col1.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.')
+    
     try:
         selected_products = procces_filter(df2, mult_rank, 'TAG_NAME')
         ranking_plot(selected_products, col1,  mult_rank)
