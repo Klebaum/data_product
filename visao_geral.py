@@ -111,11 +111,16 @@ col2.markdown('<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif;
 with col1:
     min_date = df_aux['END_TIME'].min()
     max_date = df_aux['END_TIME'].max()
+    mult_products = col1.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.')
+    try:
+        selected_products = procces_filter(df2, mult_products, 'TAG_NAME')
+    except ValueError:
+        col1.error('Selecione pelo menos um produto para visualizar as informações.')
     monitoring_date = col1.date_input('Selecione a data de monitoramento:', datetime.date(2024, 2, 9), min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário, mensal e anual.')
 
-sum_d = credit_sum_d(df2, monitoring_date)
-sum_m = credit_sum_m(df2, monitoring_date)
-sum_y = credit_sum_y(df2, monitoring_date)
+sum_d = credit_sum_d(selected_products, monitoring_date)
+sum_m = credit_sum_m(selected_products, monitoring_date)
+sum_y = credit_sum_y(selected_products, monitoring_date)
 
 _, _, daily_credits = credit_billed_day(sum_d, monitoring_date, 'TAG_NAME')
 _, _, monthly_credits = credit_billed_month(sum_m, monitoring_date, 'TAG_NAME')
@@ -131,24 +136,14 @@ with col1:
 with col2:
     plot_credit_billed_year(sum_m, monitoring_date, col2, 'TAG_NAME')
 
-container2 = st.container(border=True)
-col1, col2 = container2.columns([0.8, 1], gap="large")
+#container2 = st.container(border=True)
+#col1, col2 = container2.columns([0.8, 1], gap="large")
 
 with col1:
-  
-    mult_rank = col1.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.')
+    ranking_plot(selected_products, col1,  mult_products)
     
-    try:
-        selected_products = procces_filter(df2, mult_rank, 'TAG_NAME')
-        ranking_plot(selected_products, col1,  mult_rank)
-    except ValueError:
-        col1.error('Selecione um produto para visualizar o ranking.')
 with col2:
-    mult_pie = col2.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.', key=1)
-    try:
-        selected_products = procces_filter(df2, mult_pie, 'TAG_NAME')
-        plot = pie_plot(selected_products, col1,  mult_pie)
-        st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
-        st.plotly_chart(plot, use_container_width=True)
-    except ValueError:
-        col2.error('Selecione um produto para visualizar a porcentagem de consumo de cada produto.')
+    plot = pie_plot(selected_products, col1,  mult_products)
+    st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
+    st.plotly_chart(plot, use_container_width=True)
+   
