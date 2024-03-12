@@ -147,6 +147,8 @@ with col2:
     mult_pie = col2.multiselect('Selecione o(s) produto(s):', df2['TAG_NAME'].unique(), df2['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.', key=1)
     try:
         selected_products = procces_filter(df2, mult_pie, 'TAG_NAME')
-        pie_plot(selected_products, col1,  mult_rank)
+        plot = pie_plot(selected_products, col1,  mult_pie)
+        st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
+        st.plotly_chart(plot, use_container_width=True)
     except ValueError:
         col2.error('Selecione um produto para visualizar a porcentagem de consumo de cada produto.')

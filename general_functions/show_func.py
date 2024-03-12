@@ -93,7 +93,7 @@ def ranking_plot(df, col1, mult_rank, var_to_group='TAG_NAME'):
     col1.plotly_chart(fig, use_container_width=True)
 
 
-def pie_plot(df, col1, mult_pie, var_to_group='TAG_NAME'):
+def pie_plot(df, col, mult_pie, var_to_group='TAG_NAME'):
     """_summary_
     
     Args:
@@ -119,5 +119,6 @@ def pie_plot(df, col1, mult_pie, var_to_group='TAG_NAME'):
                 ,color=var_to_group, color_discrete_map=color_map)
     fig.update_traces(textposition='inside', textinfo='percent+label')
     fig.update_layout(width=600, height=300)
-    st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True)
+    #st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
+    #st.plotly_chart(fig, use_container_width=True)
+    return fig

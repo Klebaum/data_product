@@ -3,6 +3,7 @@ import streamlit as st
 import datetime
 from streamlit_extras.grid import grid
 import pandas as pd
+from general_functions.show_func import pie_plot
 from functions.credit_func import credit_sum_m, credit_sum_d, credit_sum_y, plot_credit_billed_day, plot_credit_billed_month, plot_credit_billed_year
 from functions.credit_func import credit_billed_year, credit_billed_month, credit_billed_day
 from functions.graph_func import make_graph
@@ -292,17 +293,25 @@ def show_data_product_1(df2, product):
             plot_credit_billed_month(sum_m, monitoring_date, col2)
         with col1:
             plot_credit_billed_year(sum_m, monitoring_date, col1)
+        try:
+            selected_products = procces_filter(df2, procces, 'QUERY_TAG')
+            plot = pie_plot(selected_products, col2,  procces, 'QUERY_TAG')
+            col2.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
+            col2.plotly_chart(plot, use_container_width=True)
+        except ValueError:
+            col2.error('Selecione um produto para visualizar a porcentagem de consumo de cada produto.')
+
     container3 = st.container(border=True)
-    col2.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos mensal</b></p>', unsafe_allow_html=True)
+    container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos mensal</b></p>', unsafe_allow_html=True)
     dot = make_graph(df2)    
-    col2.graphviz_chart(dot)
+    container3.graphviz_chart(dot)
 
     date_to_filter = pd.to_datetime(monitoring_date).strftime('%Y-%m-%d')
     df_daily_graph = df2[df2['END_TIME'] == date_to_filter]
     # st.write(df2)
-    col2.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
+    container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
     dot = make_graph(df_daily_graph)
-    col2.graphviz_chart(dot)
+    container3.graphviz_chart(dot)
 
 
 def show_data_product_2(df2, product, today, daily_credits, monthly_credits, yearly_credits, description):
@@ -415,8 +424,16 @@ def show_data_product_2(df2, product, today, daily_credits, monthly_credits, yea
             plot_credit_billed_day(sum_d, monitoring_date, col1)
         with col2:
             plot_credit_billed_month(sum_m, monitoring_date, col2)
-        with container2:
-            plot_credit_billed_year(sum_m, monitoring_date, container2)
+        with col1:
+            plot_credit_billed_year(sum_m, monitoring_date, col1)
+        try:
+            selected_products = procces_filter(df2, procces, 'QUERY_TAG')
+            plot = pie_plot(selected_products, col2,  procces, 'QUERY_TAG')
+            col2.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
+            col2.plotly_chart(plot, use_container_width=True)
+        except ValueError:
+            col2.error('Selecione um produto para visualizar a porcentagem de consumo de cada produto.')
+
     container3 = st.container(border=True)
     container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos mensal</b></p>', unsafe_allow_html=True)
     dot = make_graph(df2)    
