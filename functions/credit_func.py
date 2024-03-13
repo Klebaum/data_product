@@ -131,6 +131,7 @@ def credit_billed_month(df, date, var_to_group='QUERY_TAG'):
 
     adjust_d['END_TIME'] = pd.to_datetime(adjust_d['END_TIME'])
     
+    date_to_filter = pd.to_datetime(date).strftime('%Y/%m')
     year = pd.to_datetime(date).year
     adjust_d = adjust_d[adjust_d['END_TIME'].dt.year == year]
 
@@ -142,7 +143,7 @@ def credit_billed_month(df, date, var_to_group='QUERY_TAG'):
 
     val_total = round(adjust_d["CREDITS_USED_PER_USER_APROX"].sum(), 2)
 
-    return adjust_d, year, val_total
+    return adjust_d, date_to_filter, val_total
 
 
 def credit_billed_day(df, date, var_to_group='QUERY_TAG'):
