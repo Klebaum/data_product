@@ -11,10 +11,8 @@ from st_pages import Page, show_pages, hide_pages
 from sessions_func.create_session import runQuery
 from st_keyup import st_keyup
 
-st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
-
-query = "select owner, tag_name, obj_name, tag_value, end_time, source, query_tag, refresh_value, credits_used_per_user_aprox from streamlit_hierarchy_viewer.ml_forecasting.FORECAST_PRODUCT_v2 order by query_tag;"
-data = runQuery(query)
+# query = "select owner, tag_name, obj_name, tag_value, end_time, source, query_tag, refresh_value, credits_used_per_user_aprox from streamlit_hierarchy_viewer.ml_forecasting.FORECAST_PRODUCT_v2 order by query_tag;"
+# data = runQuery(query)
 
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
@@ -31,10 +29,8 @@ hide_pages([' '])
 # key to btn
 st.session_state.key_value = 0 
 
-#query = pd.read_csv('Custo detalhado.csv')
+df2 = st.session_state.query
 
-df2 = pd.DataFrame(data)
-st.session_state.query = df2
 
 # Dados sintéticos
 new_entry = {

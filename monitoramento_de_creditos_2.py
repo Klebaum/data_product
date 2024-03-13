@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 from functions.show_products import show_data_product_2, credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from functions.show_products import procces_filter
-query = pd.read_csv('Custo detalhado.csv')
 from st_pages import Page, show_pages, hide_pages
 from datetime import date
 
@@ -17,7 +16,7 @@ show_pages([
 ])
 
 hide_pages([' '])
-
+query = st.session_state.query
 dtypes = pd.DataFrame(query).astype({'CREDITS_USED_PER_USER_APROX':'float'}).dtypes.values
 
 df2 = pd.DataFrame(query)

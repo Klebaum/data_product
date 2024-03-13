@@ -16,7 +16,7 @@ def score_card_geral(query, col2, daily_credits, monthly_credits, yearly_credits
     Returns:
         None: return all the score cards.
     """
-    df = pd.DataFrame(query)
+    
 
     with col2:
         st.markdown(

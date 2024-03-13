@@ -306,8 +306,12 @@ def show_data_product_1(df2, product):
     dot = make_graph(df2)    
     container3.graphviz_chart(dot)
 
+    # Feito apenas por que os dados genéricos vem com o formato de string na data
+    # Assim é feito a conversão para o formato de string
+    df2['END_TIME'] = pd.to_datetime(df2['END_TIME'])
     date_to_filter = pd.to_datetime(monitoring_date).strftime('%Y-%m-%d')
     df_daily_graph = df2[df2['END_TIME'] == date_to_filter]
+    
     # st.write(df2)
     container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
     dot = make_graph(df_daily_graph)
@@ -441,6 +445,7 @@ def show_data_product_2(df2, product, today, daily_credits, monthly_credits, yea
 
     date_to_filter = pd.to_datetime(monitoring_date).strftime('%Y-%m-%d')
     df_daily_graph = df2[df2['END_TIME'] == date_to_filter]
+    
     # st.write(df2)
     container3.markdown('<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Fluxograma de Processos diário</b></p>', unsafe_allow_html=True)
     dot = make_graph(df_daily_graph)

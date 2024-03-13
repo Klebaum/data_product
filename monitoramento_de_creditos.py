@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from functions.show_products import show_data_product_1
 from functions.show_products import procces_filter
-query = pd.read_csv('Custo detalhado.csv')
+
 from st_pages import Page, show_pages, hide_pages
 
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
@@ -16,7 +16,7 @@ show_pages([
 ])
 
 hide_pages([' '])
-
+query = st.session_state.query
 dtypes = pd.DataFrame(query).astype({'CREDITS_USED_PER_USER_APROX':'float'}).dtypes.values
 
 df2 = pd.DataFrame(query)
