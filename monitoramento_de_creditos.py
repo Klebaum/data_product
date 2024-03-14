@@ -102,6 +102,7 @@ list_of_products = df2['TAG_NAME'].unique()
 #product = st.selectbox('Selecione o produto: ', list_of_products, help='Selecione o produto para visualizar os detalhes.', index=None,)
 #st.write(st.session_state.btn_tag)
 product = st.session_state.btn_tag
+# Fazer o try except para verificar se o produto existe
 if product != None:
     df2 = df2[df2['TAG_NAME'] == product]
     show_data_product_1(df2, product)

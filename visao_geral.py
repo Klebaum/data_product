@@ -117,38 +117,42 @@ with col1:
     min_date = df_aux['END_TIME'].min()
     max_date = df_aux['END_TIME'].max()
     mult_products = col1.multiselect('Selecione o(s) produto(s):', data['TAG_NAME'].unique(), data['TAG_NAME'].unique(), help='Selecione o processo para filtrar as informações.')
+    monitoring_date = col1.date_input('Selecione a data de monitoramento:', datetime.date(2024, 2, 9), min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário, mensal e anual.')
+    
     try:
         selected_products = procces_filter(data, mult_products, 'TAG_NAME')
     except ValueError:
         col1.error('Selecione pelo menos um produto para visualizar as informações.')
-    monitoring_date = col1.date_input('Selecione a data de monitoramento:', datetime.date(2024, 2, 9), min_value=min_date, max_value=max_date, help='A partir da data selecionada, será mostrada o gasto diário, mensal e anual.')
 
-sum_d = credit_sum_d(selected_products, monitoring_date)
-sum_m = credit_sum_m(selected_products, monitoring_date)
-sum_y = credit_sum_y(selected_products, monitoring_date)
+try:
 
-_, _, daily_credits = credit_billed_day(sum_d, monitoring_date, 'TAG_NAME')
-_, _, monthly_credits = credit_billed_month(sum_m, monitoring_date, 'TAG_NAME')
-_, _, yearly_credits = credit_billed_year(sum_y, monitoring_date, 'TAG_NAME')
+    sum_d = credit_sum_d(selected_products, monitoring_date)
+    sum_m = credit_sum_m(selected_products, monitoring_date)
+    sum_y = credit_sum_y(selected_products, monitoring_date)
 
-score_card_geral(data, col2, daily_credits, monthly_credits, yearly_credits)
+    _, _, daily_credits = credit_billed_day(sum_d, monitoring_date, 'TAG_NAME')
+    _, _, monthly_credits = credit_billed_month(sum_m, monitoring_date, 'TAG_NAME')
+    _, _, yearly_credits = credit_billed_year(sum_y, monitoring_date, 'TAG_NAME')
 
-container = st.container(border=True)
-col1, col2 = container.columns([0.8, 1], gap="large")
+    score_card_geral(data, col2, daily_credits, monthly_credits, yearly_credits)
 
-with col1:
-    plot_credit_billed_month(sum_m, monitoring_date, col1, 'TAG_NAME')
-with col2:
-    plot_credit_billed_year(sum_m, monitoring_date, col2, 'TAG_NAME')
+    container = st.container(border=True)
+    col1, col2 = container.columns([0.8, 1], gap="large")
 
-#container2 = st.container(border=True)
-#col1, col2 = container2.columns([0.8, 1], gap="large")
+    with col1:
+        plot_credit_billed_month(sum_m, monitoring_date, col1, 'TAG_NAME')
+    with col2:
+        plot_credit_billed_year(sum_m, monitoring_date, col2, 'TAG_NAME')
 
-with col1:
-    ranking_plot(selected_products, col1,  mult_products)
-    
-with col2:
-    plot = pie_plot(selected_products, col1,  mult_products)
-    st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
-    st.plotly_chart(plot, use_container_width=True)
-   
+    #container2 = st.container(border=True)
+    #col1, col2 = container2.columns([0.8, 1], gap="large")
+
+    with col1:
+        ranking_plot(selected_products, col1,  mult_products)
+        
+    with col2:
+        plot = pie_plot(selected_products, col1,  mult_products)
+        st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
+        st.plotly_chart(plot, use_container_width=True)
+except NameError:
+    pass    
