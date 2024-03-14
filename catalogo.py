@@ -68,7 +68,7 @@ new_entry2 = {
 new_entry3 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'ANÁLISE_CRÉDITO',
+    'TAG_NAME': 'ANALISE_CREDITO',
     'END_TIME': '2024-02-09',
     'SOURCE': 'procces_1',
     'QUERY_TAG': 'result',
@@ -84,7 +84,7 @@ new_entry3 = {
 new_entry4 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'ANÁLISE_AR',
+    'TAG_NAME': 'ANALISE_AR',
     'END_TIME': '2024-02-10',
     'SOURCE': 'procces_2',
     'QUERY_TAG': 'procces_1',
@@ -105,7 +105,6 @@ new_row_df4 = pd.DataFrame([new_entry4])
 
 df2 = pd.concat([df2, new_row_df, new_row_df2, new_row_df3, new_row_df4], ignore_index=True)
 
-
 df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(float)
 df2['TAG_NAME'] = df2['TAG_NAME'].str.replace('_', ' ')
 
@@ -116,6 +115,7 @@ list_products = df2['TAG_NAME'].unique()
 filter = st_keyup("Pesquisar Produto")
 
 # filtro que a partir do que é digitado no search, ele filtre os produtos que contém o que foi digitado
+
 df_aux = df2[df2['TAG_NAME'].str.startswith(filter.upper(), len(filter))]
 
 list_products = df_aux['TAG_NAME'].unique()
