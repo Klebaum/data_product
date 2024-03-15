@@ -4,7 +4,7 @@ import pandas as pd
 import datetime
 from datetime import date
 from sessions_func.create_session import runQuery
-from general_functions.show_func import score_card_geral, ranking_plot, pie_plot
+from general_functions.show_func import score_card_geral, ranking_plot
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from functions.credit_func import plot_credit_billed_month, plot_credit_billed_year
 from functions.show_products import procces_filter
@@ -20,10 +20,8 @@ st.session_state.query = data
 
 show_pages([
     Page("visao_geral.py","Visão Geral"),
-    Page("catalogo.py","Dataproduct Mercantil"),
-    Page("reg_prod_2.py", "Dataproduct Mercantil - opção 2"),
-    Page("monitoramento_de_creditos.py", " "),
-    Page("monitoramento_de_creditos_2.py", "  ")
+    Page("catalogo.py", "Dataproduct Mercantil"),
+    Page("monitoramento_de_creditos.py", "  ")
 ])
 
 
@@ -147,12 +145,10 @@ try:
     #container2 = st.container(border=True)
     #col1, col2 = container2.columns([0.8, 1], gap="large")
 
-    with col1:
-        ranking_plot(selected_products, col1,  mult_products)
+    # Deixei apenas esse gráfico pois não sabia o que mais colocar por enquanto, mas dá
+    # para adicionar mais gráficos aqui.
+    with container:
+        ranking_plot(selected_products, container)
         
-    with col2:
-        plot = pie_plot(selected_products, col1,  mult_products)
-        st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
-        st.plotly_chart(plot, use_container_width=True)
 except NameError:
     pass    

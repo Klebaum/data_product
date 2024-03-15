@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 pd.options.mode.chained_assignment = None  # default='warn'
 
@@ -213,7 +214,7 @@ def plot_credit_billed_year(df, date, container, var_to_group='QUERY_TAG'):
 
     container.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {year}</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='MÊS E ANO', yaxis_title='CRÉDITOS COBRADOS')
-    st.plotly_chart(fig, use_container_width=True)
+    container.plotly_chart(fig, use_container_width=True)
 
 
 def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
@@ -239,18 +240,20 @@ def plot_credit_billed_month(df, date, col2, var_to_group='QUERY_TAG'):
         colors = px.colors.qualitative.Set1[:num_unique_tags]
     color_map = dict(zip(unique_tags, colors))
 
-    # Plotting with Plotly
-    fig = px.bar(adjust_d, x='Day', y='CREDITS_USED_PER_USER_APROX', color=var_to_group,
-                 color_discrete_map=color_map, width=500, height=250, labels={'Day': 'Dia', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'})
 
+    # Plotting with Plotly
+    fig = px.line(adjust_d, x='Day', y='CREDITS_USED_PER_USER_APROX', markers=True, color=var_to_group, 
+                color_discrete_map=color_map, width=500, height=250, 
+                labels={'Day': 'Dia', 'CREDITS_USED_PER_USER_APROX': 'Créditos Cobrados'})
+    
     fig.update_xaxes(type='category')
 
     # Add total value annotation
-    fig.add_annotation(x=adjust_d['Day'].iloc[-1], y=total_credits,
-                       text='',
-                       showarrow=False,
-                       font=dict(color='black', size=16),
-                       xanchor='center', yanchor='bottom')
+    # fig.add_annotation(x=adjust_d['Day'].iloc[-1], y=total_credits,
+    #                    text='',
+    #                    showarrow=False,
+    #                    font=dict(color='black', size=16),
+    #                    xanchor='center', yanchor='bottom')
 
     col2.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {date_to_filter}</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='DATA', yaxis_title='CRÉDITOS COBRADOS')
@@ -272,31 +275,21 @@ def plot_credit_billed_day(df, date, col1, var_to_group='QUERY_TAG'):
     """
     adjust_d, date_to_filter, total_credits = credit_billed_day(df, date, var_to_group)
 
-    fig = px.bar(adjust_d, x=var_to_group, y='CREDITS_USED_PER_USER_APROX'
-                 ,color_discrete_sequence=['#249edc'], width=500, height=250)
+    adjust_d = adjust_d.sort_values(by='CREDITS_USED_PER_USER_APROX', ascending=True)
+
+    fig = px.bar(adjust_d, y=var_to_group, x='CREDITS_USED_PER_USER_APROX'
+                 ,color_discrete_sequence=['#249edc'], orientation='h', width=600, height=300)
     
-    # Add text labels on top of each bar
     for i in range(len(adjust_d)):
         fig.add_annotation(
-            x=adjust_d[var_to_group][i],
-            y=adjust_d['CREDITS_USED_PER_USER_APROX'][i],
+            x=adjust_d['CREDITS_USED_PER_USER_APROX'][i],
+            y=adjust_d[var_to_group][i],
             text=str(round(adjust_d['CREDITS_USED_PER_USER_APROX'][i], 2)),
             font=dict(color='black', size=12),
             showarrow=False,
-            xanchor='center',
-            yanchor='bottom'
+            xanchor='left',
+            yanchor='middle'
         )
-    
-    # Add total value
-    fig.add_annotation(
-    x=adjust_d[var_to_group].iloc[-1],
-    y=total_credits,
-    text='',
-    font=dict(color='black', size=16),
-    showarrow=False,
-    xanchor='right',
-    yanchor='top' 
-    )
 
     col1.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Créditos cobrados em {date_to_filter}</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='PROCESSOS', yaxis_title='CRÉDITOS COBRADOS')

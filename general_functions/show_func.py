@@ -1,6 +1,4 @@
-import pandas as pd
 import streamlit as st
-import datetime
 import plotly.express as px
 
 def score_card_geral(query, col2, daily_credits, monthly_credits, yearly_credits):
@@ -59,13 +57,12 @@ def credit_sum_total(df, var_to_group='TAG_NAME'):
     return df
 
 
-def ranking_plot(df, col1, mult_rank, var_to_group='TAG_NAME'):
+def ranking_plot(df, col1, var_to_group='TAG_NAME'):
     """_summary_
     
     Args:
         df (DataFrame): DataFrame with the data to be used in the analysis.
         col1 (streamlit.container): Streamlit container to be used in the analysis.
-        mult_rank (list): list of products to be used in the analysis.
         var_to_group (str): variable to be used in the analysis.
 
     Returns:
@@ -91,34 +88,3 @@ def ranking_plot(df, col1, mult_rank, var_to_group='TAG_NAME'):
     col1.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Produtos que mais consomem créditos</b></p>', unsafe_allow_html=True)
     fig.update_layout(xaxis_title='CRÉDITOS COBRADOS', yaxis_title='PRODUTOS')
     col1.plotly_chart(fig, use_container_width=True)
-
-
-def pie_plot(df, col, mult_pie, var_to_group='TAG_NAME'):
-    """_summary_
-    
-    Args:
-        df (DataFrame): DataFrame with the data to be used in the analysis.
-        col1 (streamlit.container): Streamlit container to be used in the analysis.
-        mult_pie (list): list of products to be used in the analysis.
-        var_to_group (str): variable to be used in the analysis.
-
-    Returns:
-        None: return the pie plot.
-    """    
-    colors = ['#249edc', '#005b96', '#b3cde0']
-   
-    adjust_d = credit_sum_total(df, var_to_group)
-
-    unique_tags = adjust_d[var_to_group].unique()
-    num_unique_tags = len(unique_tags)
-    if colors is None:
-        colors = px.colors.qualitative.Set1[:num_unique_tags]
-    color_map = dict(zip(unique_tags, colors))
-
-    fig = px.pie(adjust_d, values='CREDITS_USED_PER_USER_APROX', names=var_to_group 
-                ,color=var_to_group, color_discrete_map=color_map)
-    fig.update_traces(textposition='inside', textinfo='percent+label')
-    fig.update_layout(width=600, height=300)
-    #st.markdown(f'<p style="color:#3d3d3c; font-family:Source Sans Pro, sans serif; font-size: 20px;"><b>Porcentagem de consumo de créditos</b></p>', unsafe_allow_html=True)
-    #st.plotly_chart(fig, use_container_width=True)
-    return fig

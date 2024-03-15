@@ -1,18 +1,15 @@
 import pandas as pd
 import streamlit as st
-from functions.show_products import show_data_product_1
-from functions.show_products import procces_filter
-
+from functions.show_products import show_data_product, credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from st_pages import Page, show_pages, hide_pages
+from datetime import date
 
 st.image('https://triggo.ai/assets/LOGO.svg', width=200)
 
 show_pages([
     Page("visao_geral.py","Visão Geral"),
-    Page("catalogo.py","Dataproduct Mercantil"),
-    Page("reg_prod_2.py", "Dataproduct Mercantil - opção 2"),
-    Page("monitoramento_de_creditos.py", " "),
-    Page("monitoramento_de_creditos_2.py", "  ")
+    Page("catalogo.py", "Dataproduct Mercantil"),
+    Page("monitoramento_de_creditos.py", "  ")
 ])
 
 hide_pages([' '])
@@ -94,15 +91,24 @@ new_row_df4 = pd.DataFrame([new_entry4])
 # Concatenando o novo DataFrame com o DataFrame existente
 df2 = pd.concat([df2, new_row_df, new_row_df2, new_row_df3, new_row_df4], ignore_index=True)
 
+today = date.today()
+
 df2['CREDITS_USED_PER_USER_APROX'] = df2['CREDITS_USED_PER_USER_APROX'].astype(float)
 df2['TAG_NAME'] = df2['TAG_NAME'].str.replace('_', ' ')
-
 list_of_products = df2['TAG_NAME'].unique()
 
-#product = st.selectbox('Selecione o produto: ', list_of_products, help='Selecione o produto para visualizar os detalhes.', index=None,)
-#st.write(st.session_state.btn_tag)
-product = st.session_state.btn_tag
-# Fazer o try except para verificar se o produto existe
+product = st.session_state.btn_tag_2
+
 if product != None:
-    df2 = df2[df2['TAG_NAME'] == product]
-    show_data_product_1(df2, product)
+    df_aux = df2[df2['TAG_NAME'] == product]
+
+    sum_d = credit_sum_d(df_aux, today)
+    sum_m = credit_sum_m(df_aux, today)
+    sum_y = credit_sum_y(df_aux, today)
+    
+    _, _, daily_credits = credit_billed_day(sum_d, today)
+    _, _, monthly_credits = credit_billed_month(sum_m, today)
+    _, _, yearly_credits = credit_billed_year(sum_y, today)
+    description = "Descrição do produto"
+
+    show_data_product(df_aux, product, today, daily_credits, monthly_credits, yearly_credits, description)
