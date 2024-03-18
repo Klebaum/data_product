@@ -4,7 +4,7 @@ import pandas as pd
 import datetime
 from datetime import date
 from sessions_func.create_session import runQuery
-from general_functions.show_func import score_card_geral, ranking_plot
+from catalog_functions.show_func import score_card_geral, ranking_plot
 from functions.credit_func import credit_billed_day, credit_billed_month, credit_billed_year, credit_sum_d, credit_sum_m, credit_sum_y
 from functions.credit_func import plot_credit_billed_month, plot_credit_billed_year
 from functions.show_products import procces_filter
