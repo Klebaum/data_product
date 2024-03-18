@@ -21,7 +21,7 @@ def make_graph(df):
             f"<"
             f"<table border='0' cellborder='0' cellspacing='0'>"
             f"<tr><td colspan='2'><b>{row['QUERY_TAG']}</b></td></tr>"
-            f"<tr><td align='left'><font size='500'>Créditos cobrados</font></td><td align='left'>{row['CREDITS_USED_PER_USER_APROX']}</td></tr>"
+            f"<tr><td align='left'><font size='500'>Créditos cobrados</font></td><td align='left'>{round(row['CREDITS_USED_PER_USER_APROX'], 3)}</td></tr>"
             f"<tr><td align='left'>Tipo dos Objetos</td><td align='left'>{row['TAG_VALUE']}</td></tr>"
             f"<tr><td align='left'>Refresh</td><td align='left'>{row['REFRESH_VALUE']}</td></tr>"
             f"</table>"

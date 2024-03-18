@@ -10,7 +10,7 @@
 /* CUSTOM MARKDOWN CLASSES */
 .dashboard_title {
     font-family: Source Sans Pro;
-    font-size: 35px; 
+    font-size: 25px; 
     font-weight: 600;
     line-height: 1.2;
     text-align: left;
@@ -20,7 +20,7 @@
 
 .price_details {
     font-family: Source Sans Pro;
-    font-size: 30px; 
+    font-size: 20px; 
     color: #3d3d3c;
     font-weight: 900;
     text-align: center;
@@ -30,7 +30,7 @@
 
 .btc_text {
     font-family: Source Sans Pro;
-    font-size: 14px; 
+    font-size: 16px; 
     color: #29b5e8;
     font-weight: bold;
     text-align: center;
@@ -40,7 +40,7 @@
 
 .eth_text {
     font-family: Source Sans Pro;
-    font-size: 14px; 
+    font-size: 16px; 
     color: #29b5e8;
     font-weight: bold;
     text-align: center;
@@ -50,28 +50,10 @@
 
 .xmr_text {
     font-family: Source Sans Pro;
-    font-size: 14px; 
+    font-size: 16px; 
     color: #29b5e8;
     font-weight: bold;
     text-align: center;
-    line-height: 0.2;
-    padding-top: 10px;
-}
-
-.sol_text {
-    font-size: 14px; 
-    color: #807af4;
-    font-weight: bold;
-    text-align: left;
-    line-height: 0.2;
-    padding-top: 10px;
-}
-
-.xrp_text {
-    font-size: 14px; 
-    color: #01acf1;
-    font-weight: bold;
-    text-align: left;
     line-height: 0.2;
     padding-top: 10px;
 }
