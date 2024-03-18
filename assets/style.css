@@ -57,3 +57,13 @@
     line-height: 0.2;
     padding-top: 10px;
 }
+
+.outros_text {
+    font-family: Source Sans Pro;
+    font-size: 16px; 
+    color: #29b5e8;
+    font-weight: bold;
+    text-align: center;
+    line-height: 0.2;
+    padding-top: 10px;
+}
