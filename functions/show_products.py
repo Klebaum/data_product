@@ -247,6 +247,7 @@ def show_data_product(df2, product, today, daily_credits, monthly_credits, yearl
     """
 
     today = pd.to_datetime(today).strftime('%Y/%m/%d')
+   
     title = df2['TAG_NAME'].astype(str).unique()[0].replace('_', ' ')
     #st.markdown(f'<p style="color:#29b5e8; font-family:Source Sans Pro, sans serif; font-size: 25px;"><b>{title}: </b></p> ', unsafe_allow_html=True)
     

@@ -53,7 +53,7 @@ new_entry2 = {
 new_entry3 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'ANÁLISE_CRÉDITO',
+    'TAG_NAME': 'ANALISE_CREDITO',
     'END_TIME': '2024-02-09',
     'SOURCE': 'procces_1',
     'QUERY_TAG': 'result',
@@ -69,7 +69,7 @@ new_entry3 = {
 new_entry4 = {
     'OWNER': 'MERCANTIL',
     'WAREHOUSE_NAME': 'COMPUTE_WH',
-    'TAG_NAME': 'ANÁLISE_AR',
+    'TAG_NAME': 'ANALISE_AR',
     'END_TIME': '2024-02-10',
     'SOURCE': 'procces_2',
     'QUERY_TAG': 'procces_1',
